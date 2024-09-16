@@ -1,0 +1,6 @@
+openai
+PyPDF2
+OpenAI
+flask
+requests
+gunicorn

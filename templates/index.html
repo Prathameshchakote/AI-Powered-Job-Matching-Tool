@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+</head>
+<body>
+    <h1>Job Search</h1>
+    <form method="post" action="/">
+        <input type="text" name="job_title" placeholder="Enter job title">
+        <button type="submit">Search</button>
+    </form>
+        
+    <div id="job-listings">
+        <h2>Job Listings</h2>
+        {% for job in jobs %}
+        <div class="job-listing">
+            <h3>{{ job.job_title }}</h3>
+            <p><strong>Company:</strong> {{ job.employer_name }}</p>
+            <p><strong>Location:</strong> {{ job.job_city }}, {{ job.job_state }}</p>
+            <p><strong>Description:</strong> {{ job.job_description }}</p>
+            <p><a href="{{ job.job_apply_link }}" target="_blank">Apply Here</a></p>
+            <form action="/upload_resume" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="job_description" value="{{ job.job_description }}">
+                <input type="hidden" name="job_title" value="{{ job.job_title }}">
+                <input type="hidden" name="employer_name" value="{{ job.employer_name }}">
+                <input type="hidden" name="job_state" value="{{ job.job_state }}">
+                <input type="hidden" name="job_city" value="{{ job.job_city }}">
+                <input type="hidden" name="job_apply_link" value="{{ job.job_apply_link }}">
+
+                <input type="file" name="resume" accept="application/pdf">
+                <button type="submit">Rate my resume</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% if match_percentage is defined %}
+    <div class="match-percentage">
+        <h2>Resume Analysis</h2>
+        <p>{{ match_percentage }}% match with job description.</p>
+    </div>
+    {% endif %}
+</body>
+</html>
